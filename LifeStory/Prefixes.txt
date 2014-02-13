@@ -1,0 +1,65 @@
+--- Form Widgets ---
+TextView				tv
+Button					btn
+Small Button			sbtn
+Toggle Button			tbtn
+CheckBox				cb
+RadioButton				rb
+CheckedTextView			ctv
+Spinner					sp
+ProgressBar	(Large)		lpg
+ProgressBar (Normal)	pg
+ProgressBar (horziontal)	hpg
+SeekBar					sb
+QuickContactBadge		qcb
+RadioGroup				rg
+RatingBar				rtb
+Switch					sw
+
+--- Text Fields ---
+Plain Text				ptf
+Person Name				pntf
+Password				pwtf
+E-Mail					etf
+Phone					ttf
+Postal Adress			atf
+Multiline Text			mttf
+Time					ztf
+Date					dtf
+Number					ntf
+Number (Signed			nstf
+AutoCompleteTextView	actf
+MultiAutoComplete		mactf
+
+--- Composite ---
+ListView 				lv
+ExpandableListView		elv
+GridView				gv
+ScrollView				scv
+HorizontalScrollView	hsv
+SearchView				sv
+SlidingDrawer			sd
+TabHost					th
+WebView					wv
+
+--- Images & Media ---
+ImageView				iv
+ImageButton				ibtn
+Gallery					ga
+MediaController			ma
+VideoView				vv
+
+--- Time & Date ---
+TimePicker				tp
+DatePicker				dap
+CalendarView			cw
+Chronometer				cm
+AnalogClock				ac
+DigitalClock			dg
+
+
+
+
+			
+
+
