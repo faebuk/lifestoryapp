@@ -1,4 +1,6 @@
-package com.faebuk.lifestory;
+package com.faebuk.lifestory.view;
+
+import com.faebuk.lifestory.R;
 
 import android.app.Activity;
 import android.os.Bundle;
