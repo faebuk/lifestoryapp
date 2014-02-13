@@ -14,9 +14,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		Log.d("test von", "robert");
-		Log.d("test2 von ", "robert");
-		Log.d("test3 von", "robert");
 	}
 
 	@Override
