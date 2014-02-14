@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 
 public class SlideMenuContainer extends LinearLayout {
 
+
 	private View vMenu;
 	private View vContent;
 
@@ -19,25 +20,34 @@ public class SlideMenuContainer extends LinearLayout {
 	protected int currentContentOffSet = 0;
 	protected MenuStates currentMenuState = MenuStates.CLOSED;
 
-	public SlideMenuContainer(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-	}
+	private View menu;
+	private View content;
+
+	// Constants
+	protected static final int menuMargin = 150;
+
+	public enum MenuState {
+		CLOSED, OPEN
+	};
+
+	// Position information attributes
+	protected int currentContentOffset = 0;
+	protected MenuState menuCurrentState = MenuState.CLOSED;
 
 	public SlideMenuContainer(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		// TODO Auto-generated constructor stub
 	}
 
-	public SlideMenuContainer(Context context) {
-		super(context);
-	}
 
-	protected void onAttachedWindow() {
+	@Override
+	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
 
-		this.vMenu = this.getChildAt(0);
-		this.vContent = this.getChildAt(1);
+		this.menu = this.getChildAt(0);
+		this.content = this.getChildAt(1);
 
-		this.vMenu.setVisibility(View.GONE);
+		this.menu.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -46,40 +56,42 @@ public class SlideMenuContainer extends LinearLayout {
 		if (changed)
 			this.calculateChildDimensions();
 
-		this.vMenu.layout(left, top, right - MENU_MARGIN, bottom);
+		this.menu.layout(left, top, right - menuMargin, bottom);
 
-		this.vContent.layout(left + this.currentContentOffSet, top, right
-				+ this.currentContentOffSet, bottom);
+		this.content.layout(left + this.currentContentOffset, top, right
+				+ this.currentContentOffset, bottom);
+
 	}
 
 	public void toggleMenu() {
-		switch (this.currentMenuState) {
+		switch (this.menuCurrentState) {
 		case CLOSED:
-			this.vMenu.setVisibility(View.VISIBLE);
-			this.currentContentOffSet = this.getMenuWidth();
-			this.vContent.offsetLeftAndRight(currentContentOffSet);
-			this.currentMenuState = MenuStates.OPEN;
+			this.menu.setVisibility(View.VISIBLE);
+			this.currentContentOffset = this.getMenuWidth();
+			this.content.offsetLeftAndRight(currentContentOffset);
+			this.menuCurrentState = MenuState.OPEN;
 			break;
 		case OPEN:
-			this.vContent.offsetLeftAndRight(-currentContentOffSet);
-			this.currentContentOffSet = 0;
-			this.currentMenuState = MenuStates.CLOSED;
-			this.vMenu.setVisibility(View.GONE);
+			this.content.offsetLeftAndRight(-currentContentOffset);
+			this.currentContentOffset = 0;
+			this.menuCurrentState = MenuState.CLOSED;
+			this.menu.setVisibility(View.GONE);
 			break;
 		}
+
 		this.invalidate();
 	}
 
 	private int getMenuWidth() {
-		return this.vMenu.getLayoutParams().width;
+		return this.menu.getLayoutParams().width;
 	}
 
 	private void calculateChildDimensions() {
-		this.vContent.getLayoutParams().height = this.getHeight();
-		this.vContent.getLayoutParams().width = this.getWidth();
+		this.content.getLayoutParams().height = this.getHeight();
+		this.content.getLayoutParams().width = this.getWidth();
 
-		this.vMenu.getLayoutParams().width = this.getWidth() - MENU_MARGIN;
-		this.vMenu.getLayoutParams().height = this.getHeight();
+		this.menu.getLayoutParams().width = this.getWidth() - menuMargin;
+		this.menu.getLayoutParams().height = this.getHeight();
 	}
 
 }
