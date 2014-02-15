@@ -1,53 +1,55 @@
 package com.faebuk.lifestory.view;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
+import android.widget.Scroller;
 
 public class SlideMenuContainer extends LinearLayout {
 
-
+	// Referenzen auf die in dieser View verwendeten Groups
 	private View vMenu;
 	private View vContent;
 
+	// Animationenkonstanten
+	private static final int menuAnimationDuration = 500;
+	private static final int menuAnimationPollingInterval = 16;
+
+	// Objekte für die Animation
+	protected Scroller menuAnimationScroller = new Scroller(this.getContext(),
+			new LinearInterpolator());
+	protected Runnable menuAnimationRunnable = new AnimationRunnable();
+	protected Handler menuAnimationHandler = new Handler();
+
+	// Layoutkonstante
 	protected static final int MENU_MARGIN = 150;
 
+	// Zustände des Menüs
 	public enum MenuStates {
-		OPEN, CLOSED
+		OPEN, CLOSED, OPENING, CLOSING
 	};
 
+	// Informationsattribute der Position
 	protected int currentContentOffSet = 0;
 	protected MenuStates currentMenuState = MenuStates.CLOSED;
 
-	private View menu;
-	private View content;
-
-	// Constants
-	protected static final int menuMargin = 150;
-
-	public enum MenuState {
-		CLOSED, OPEN
-	};
-
-	// Position information attributes
-	protected int currentContentOffset = 0;
-	protected MenuState menuCurrentState = MenuState.CLOSED;
-
+	// Konstruktor
 	public SlideMenuContainer(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 	}
-
 
 	@Override
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
 
-		this.menu = this.getChildAt(0);
-		this.content = this.getChildAt(1);
+		this.vMenu = this.getChildAt(0);
+		this.vContent = this.getChildAt(1);
 
-		this.menu.setVisibility(View.GONE);
+		this.vMenu.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -56,42 +58,95 @@ public class SlideMenuContainer extends LinearLayout {
 		if (changed)
 			this.calculateChildDimensions();
 
-		this.menu.layout(left, top, right - menuMargin, bottom);
+		this.vMenu.layout(left, top, right - MENU_MARGIN, bottom);
 
-		this.content.layout(left + this.currentContentOffset, top, right
-				+ this.currentContentOffset, bottom);
+		this.vContent.layout(left + this.currentContentOffSet, top, right
+				+ this.currentContentOffSet, bottom);
 
 	}
 
 	public void toggleMenu() {
-		switch (this.menuCurrentState) {
+		switch (this.currentMenuState) {
 		case CLOSED:
-			this.menu.setVisibility(View.VISIBLE);
-			this.currentContentOffset = this.getMenuWidth();
-			this.content.offsetLeftAndRight(currentContentOffset);
-			this.menuCurrentState = MenuState.OPEN;
+			this.currentMenuState = MenuStates.OPENING;
+			this.vMenu.setVisibility(View.VISIBLE);
+			this.menuAnimationScroller.startScroll(0, 0, this.getMenuWidth(),
+					0, menuAnimationDuration);
 			break;
 		case OPEN:
-			this.content.offsetLeftAndRight(-currentContentOffset);
-			this.currentContentOffset = 0;
-			this.menuCurrentState = MenuState.CLOSED;
-			this.menu.setVisibility(View.GONE);
+			this.currentMenuState = MenuStates.CLOSING;
+			this.menuAnimationScroller.startScroll(this.currentContentOffSet,
+					0, -this.currentContentOffSet, 0, menuAnimationDuration);
 			break;
+		default:
+			return;
+
 		}
+		this.menuAnimationHandler.postDelayed(this.menuAnimationRunnable,
+				menuAnimationPollingInterval);
 
 		this.invalidate();
 	}
 
 	private int getMenuWidth() {
-		return this.menu.getLayoutParams().width;
+		return this.vMenu.getLayoutParams().width;
 	}
 
 	private void calculateChildDimensions() {
-		this.content.getLayoutParams().height = this.getHeight();
-		this.content.getLayoutParams().width = this.getWidth();
+		this.vContent.getLayoutParams().height = this.getHeight();
+		this.vContent.getLayoutParams().width = this.getWidth();
 
-		this.menu.getLayoutParams().width = this.getWidth() - menuMargin;
-		this.menu.getLayoutParams().height = this.getHeight();
+		this.vMenu.getLayoutParams().width = this.getWidth() - MENU_MARGIN;
+		this.vMenu.getLayoutParams().height = this.getHeight();
 	}
 
+	private void adjustContentPosition(boolean isAnimationOngoing) {
+		int scrollerOffset = this.menuAnimationScroller.getCurrX();
+
+		this.vContent.offsetLeftAndRight(scrollerOffset
+				- this.currentContentOffSet);
+
+		this.currentContentOffSet = scrollerOffset;
+
+		this.invalidate();
+
+		if (isAnimationOngoing)
+			this.menuAnimationHandler.postDelayed(this.menuAnimationRunnable,
+					menuAnimationPollingInterval);
+		else
+			this.onMenuTransitionComplete();
+	}
+
+	private void onMenuTransitionComplete() {
+		switch (this.currentMenuState) {
+		case OPENING:
+			this.currentMenuState = MenuStates.OPEN;
+			break;
+		case CLOSING:
+			this.currentMenuState = MenuStates.CLOSED;
+			this.vMenu.setVisibility(View.GONE);
+			break;
+		default:
+			return;
+		}
+	}
+
+	protected class SmoothInterpolator implements Interpolator {
+
+		@Override
+		public float getInterpolation(float t) {
+			return (float) Math.pow(t - 1, 5) + 1;
+		}
+
+	}
+
+	protected class AnimationRunnable implements Runnable {
+		@Override
+		public void run() {
+			SlideMenuContainer.this
+					.adjustContentPosition(SlideMenuContainer.this.menuAnimationScroller
+							.computeScrollOffset());
+		}
+
+	}
 }
