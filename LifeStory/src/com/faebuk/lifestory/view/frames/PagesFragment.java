@@ -1,4 +1,4 @@
-package com.faebuk.lifestory.view;
+package com.faebuk.lifestory.view.frames;
 
 import com.faebuk.lifestory.R;
 import android.app.Fragment;

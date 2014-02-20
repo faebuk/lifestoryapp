@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -21,8 +21,13 @@
         <item name="android:actionBarStyle">@style/MyActionBar</item>
     </style>
 
+    <style name="ActionBarTextStyle" partent="TextAppearance.Holo.Widget.ActionBar.Subtitle">
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">#BB9870</item>
+        <item name="android:background">@drawable/actionbar</item>
+        <item name="android:textSize">@style/ActionBarTextStyle</item>
     </style>
 
 </resources>

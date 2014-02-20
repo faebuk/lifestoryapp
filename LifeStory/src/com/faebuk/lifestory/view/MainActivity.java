@@ -1,12 +1,11 @@
 package com.faebuk.lifestory.view;
 
-import com.faebuk.lifestory.R;
-
 import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -18,6 +17,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.faebuk.lifestory.R;
+import com.faebuk.lifestory.view.frames.CommunityFragment;
+import com.faebuk.lifestory.view.frames.FindPeopleFragment;
+import com.faebuk.lifestory.view.frames.HomeFragment;
+import com.faebuk.lifestory.view.frames.PagesFragment;
+import com.faebuk.lifestory.view.frames.PhotosFragment;
+import com.faebuk.lifestory.view.frames.WhatsHotFragment;
 
 public class MainActivity extends Activity {
 	private DrawerLayout mDrawerLayout;
@@ -138,6 +145,8 @@ public class MainActivity extends Activity {
 		// Handle action bar actions click
 		switch (item.getItemId()) {
 		case R.id.action_settings:
+			Intent i = new Intent(MainActivity.this, LoginActivity.class);
+			startActivity(i);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

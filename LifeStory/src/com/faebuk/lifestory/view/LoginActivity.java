@@ -9,14 +9,20 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.faebuk.lifestory.R;
+import com.faebuk.lifestory.help.Manager;
 
 public class LoginActivity extends Activity implements OnClickListener {
 
+	Manager manager;
+	
 	EditText etfLoginName;
 	EditText pwtfLoginPassword;
+	
+	TextView tvlHeadline;
 	
 	Button btnLogin;
 
@@ -33,13 +39,23 @@ public class LoginActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
-		etfLoginName = (EditText) findViewById(R.id.etfLoginName);
-		pwtfLoginPassword = (EditText) findViewById(R.id.pwtfLoginPassword);
 		
+		
+		getActionBar().setTitle("Login");
+
+		Manager.TypeFaceTextView(tvlHeadline, getAssets());
+		
+		etfLoginName = (EditText) findViewById(R.id.etfLoginName);
+		Manager.TypeFaceEditText(etfLoginName, getAssets());
+		
+		pwtfLoginPassword = (EditText) findViewById(R.id.pwtfLoginPassword);
+		Manager.TypeFaceEditText(pwtfLoginPassword, getAssets());
+
 		cbAutoLogin = (CheckBox) findViewById(R.id.cbLoginAutoLogin);
+		Manager.TypeFaceCheckBox(cbAutoLogin, getAssets());
 		
 		btnLogin = (Button) findViewById(R.id.btnLogin);
+		Manager.TypeFaceButton(btnLogin, getAssets());
 		btnLogin.setOnClickListener(this);
 
 		username = "name@email.com";

@@ -6,7 +6,7 @@
     <string name="action_settings">Settings</string>
 
     <!-- activity_login Strings -->
-    <string name="etfHintLoginName">name@email.com</string>
+    <string name="etfHintLoginName">username</string>
     <string name="pwtfHintLoginPassword">password</string>
     <string name="cbAutoLogin">Eingeloggt bleiben</string>
     <string name="btnLogin">Login</string>
