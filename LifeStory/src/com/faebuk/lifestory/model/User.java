@@ -27,7 +27,7 @@ public class User {
 		
 	}
 	
-	protected Boolean login(String username, String password) throws IOException, ParseException {		
+	public Boolean login(String username, String password) throws IOException, ParseException {		
 		String urlParameters = "username="+username+"&password="+password;
 		URL url = new URL("http://faebuk.ch/lifestoryapp/v1/login");
 		URLConnection conn = url.openConnection();
@@ -63,6 +63,7 @@ public class User {
 			this.createdat = (String) jsonObject.get("createdAt");
 			this.email = (String) jsonObject.get("email");
 			this.username = (String) jsonObject.get("username");
+			this.userid = this.longToInt((Long) jsonObject.get("id_user")) ;
 			this.loggedin = true;
 			return true;
 		}
@@ -90,7 +91,17 @@ public class User {
 		return false;
 	}
 	
+	protected int getUserId(){
+		return this.userid;
+	}
+	
 	protected ArrayList<Post> getPosts(){
 		return null;
 	}
+	
+	public int longToInt(Long longVariable){
+		return Integer.valueOf(longVariable.toString()); 
+	}
 }
+
+
