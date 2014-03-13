@@ -1,3 +1,5 @@
+package com.faebuk.lifestory.model;
+
 
 public class Media {
 	

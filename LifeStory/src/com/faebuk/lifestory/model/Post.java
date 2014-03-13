@@ -1,3 +1,5 @@
+package com.faebuk.lifestory.model;
+
 import java.util.Date;
 
 
