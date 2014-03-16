@@ -1,6 +1,9 @@
 package com.faebuk.lifestory.view;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.json.simple.parser.ParseException;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -19,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.faebuk.lifestory.R;
+import com.faebuk.lifestory.model.User;
 import com.faebuk.lifestory.view.frames.CommunityFragment;
 import com.faebuk.lifestory.view.frames.FindPeopleFragment;
 import com.faebuk.lifestory.view.frames.HomeFragment;
@@ -47,6 +51,19 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		User u = new User();
+		
+		try {
+			Log.d(u.login("faebuk", "1234").toString(), "test12345");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		setContentView(R.layout.activity_main);
 
 		mTitle = mDrawerTitle = getTitle();

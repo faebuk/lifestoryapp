@@ -1,9 +1,14 @@
 package com.faebuk.lifestory.view;
 
+import java.io.IOException;
+
+import org.json.simple.parser.ParseException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -14,6 +19,7 @@ import android.widget.Toast;
 
 import com.faebuk.lifestory.R;
 import com.faebuk.lifestory.help.Manager;
+import com.faebuk.lifestory.model.User;
 
 public class LoginActivity extends Activity implements OnClickListener {
 
@@ -40,22 +46,33 @@ public class LoginActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		
+		User u = new User();
+		
+		try {
+			Log.d(u.login("faebuk", "1234").toString(), "test12345");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		getActionBar().setTitle("Login");
 
-		Manager.TypeFaceTextView(tvlHeadline, getAssets());
+		//Manager.TypeFaceTextView(tvlHeadline, getAssets());
 		
 		etfLoginName = (EditText) findViewById(R.id.etfLoginName);
-		Manager.TypeFaceEditText(etfLoginName, getAssets());
+		//Manager.TypeFaceEditText(etfLoginName, getAssets());
 		
 		pwtfLoginPassword = (EditText) findViewById(R.id.pwtfLoginPassword);
-		Manager.TypeFaceEditText(pwtfLoginPassword, getAssets());
+		//Manager.TypeFaceEditText(pwtfLoginPassword, getAssets());
 
 		cbAutoLogin = (CheckBox) findViewById(R.id.cbLoginAutoLogin);
-		Manager.TypeFaceCheckBox(cbAutoLogin, getAssets());
+		//Manager.TypeFaceCheckBox(cbAutoLogin, getAssets());
 		
 		btnLogin = (Button) findViewById(R.id.btnLogin);
-		Manager.TypeFaceButton(btnLogin, getAssets());
+		//Manager.TypeFaceButton(btnLogin, getAssets());
 		btnLogin.setOnClickListener(this);
 
 		username = "name@email.com";
