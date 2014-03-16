@@ -43,7 +43,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		
 		getActionBar().setTitle("Login");
 
-		Manager.TypeFaceTextView(tvlHeadline, getAssets());
+		//Manager.TypeFaceTextView(tvlHeadline, getAssets());
 		
 		etfLoginName = (EditText) findViewById(R.id.etfLoginName);
 		Manager.TypeFaceEditText(etfLoginName, getAssets());
