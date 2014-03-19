@@ -72,7 +72,6 @@ public class User extends  AsyncTask<String, Void, String>{
 		    // writing response to log
 		    HttpEntity entity = response.getEntity();
 		    String responseString = EntityUtils.toString(entity, "UTF-8");
-		    Log.d("Http Response:", responseString);
 		    
 		    JSONParser jsonParser = new JSONParser();
 			JSONObject jsonObject = null;

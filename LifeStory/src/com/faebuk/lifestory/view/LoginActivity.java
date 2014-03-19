@@ -79,6 +79,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 			saveSharedPrefs();
 			if (!etfLoginName.getText().toString().equals("")&&!pwtfLoginPassword.getText().toString().equals("")) {
 				u.execute(etfLoginName.getText().toString(), pwtfLoginPassword.getText().toString());				
+				
 				if(u.isLoggedIn()){
 					Intent intent = new Intent(LoginActivity.this,MainActivity.class);				
 					startActivity(intent);
