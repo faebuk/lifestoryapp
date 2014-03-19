@@ -22,6 +22,8 @@ import com.faebuk.lifestory.help.Manager;
 import com.faebuk.lifestory.model.User;
 
 public class LoginActivity extends Activity implements OnClickListener {
+	
+	User u;
 
 	Manager manager;
 	
@@ -46,18 +48,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		
-		User u = new User();
-		
-		try {
-			Log.d(u.login("faebuk", "1234").toString(), "test12345");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		u = new User();
+					
 		getActionBar().setTitle("Login");
 
 		//Manager.TypeFaceTextView(tvlHeadline, getAssets());
@@ -75,9 +67,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 		//Manager.TypeFaceButton(btnLogin, getAssets());
 		btnLogin.setOnClickListener(this);
 
-		username = "name@email.com";
-		password = "password";
-
 		MSG_LOGIN_ERROR = getResources().getString(R.string.msg_login_error);
 		
 		saveSharedPrefs();
@@ -88,11 +77,16 @@ public class LoginActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		if (v == btnLogin) {
 			saveSharedPrefs();
-			if (etfLoginName.getText().toString().equals(username)
-					|| pwtfLoginPassword.getText().toString().equals(password)) {
-				Intent intent = new Intent(LoginActivity.this,
-						MainActivity.class);
-				startActivity(intent);
+			if (!etfLoginName.getText().toString().equals("")&&!pwtfLoginPassword.getText().toString().equals("")) {
+				u.execute(etfLoginName.getText().toString(), pwtfLoginPassword.getText().toString());				
+				if(u.isLoggedIn()){
+					Intent intent = new Intent(LoginActivity.this,MainActivity.class);				
+					startActivity(intent);
+				}
+				else{
+					Toast.makeText(getApplicationContext(), MSG_LOGIN_ERROR,
+							Toast.LENGTH_LONG).show();				}
+				
 			} else {
 				Toast.makeText(getApplicationContext(), MSG_LOGIN_ERROR,
 						Toast.LENGTH_LONG).show();

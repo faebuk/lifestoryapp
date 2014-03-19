@@ -54,15 +54,15 @@ public class MainActivity extends Activity {
 		
 		User u = new User();
 		
-		try {
-			Log.d(u.login("faebuk", "1234").toString(), "test12345");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			Log.d(u.login("faebuk", "1234").toString(), "test12345");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		setContentView(R.layout.activity_main);
 

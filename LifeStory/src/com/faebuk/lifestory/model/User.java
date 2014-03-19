@@ -11,6 +11,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -19,14 +20,16 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 
-public class User {
+public class User extends  AsyncTask<String, Void, String>{
 	
 	int userid;
 	String username = null;
@@ -40,8 +43,8 @@ public class User {
 		
 	}
 	
-	public Boolean login(String username, String password) throws IOException, ParseException {		
-		
+	@Override
+	protected String doInBackground(String... params) {
 		// Creating HTTP client
 		HttpClient httpClient = new DefaultHttpClient();
 		 
@@ -50,8 +53,8 @@ public class User {
 		
 		// Building post parameters, key and value pair
 		List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
-		nameValuePair.add(new BasicNameValuePair("username", "faebuk"));
-		nameValuePair.add(new BasicNameValuePair("password", "1234"));
+		nameValuePair.add(new BasicNameValuePair("username", params[0]));
+		nameValuePair.add(new BasicNameValuePair("password", params[1]));
 		
 		// Url Encoding the POST parameters
 		try {
@@ -67,7 +70,35 @@ public class User {
 		    HttpResponse response = httpClient.execute(httpPost);
 		 
 		    // writing response to log
-		    Log.d("Http Response:", response.toString());
+		    HttpEntity entity = response.getEntity();
+		    String responseString = EntityUtils.toString(entity, "UTF-8");
+		    Log.d("Http Response:", responseString);
+		    
+		    JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = null;
+			try {
+				jsonObject = (JSONObject) jsonParser.parse(responseString);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			Boolean error = (Boolean) jsonObject.get("error");
+			
+			
+			
+			if (error){ 
+				this.loggedin = false;
+			}
+			else{ 
+				this.apikey = (String) jsonObject.get("apiKey");
+				this.createdat = (String) jsonObject.get("createdAt");
+				this.email = (String) jsonObject.get("email");
+				this.username = (String) jsonObject.get("username");
+				this.userid = this.longToInt((Long) jsonObject.get("id_user")) ;
+				this.loggedin = true;
+			}
+		
 		 
 		} catch (ClientProtocolException e) {
 		    // writing exception to log
@@ -77,48 +108,7 @@ public class User {
 		    // writing exception to log
 		    e.printStackTrace();
 		}
-		
-		return loggedin;
-		
-		/*String urlParameters = "username="+username+"&password="+password;
-		URL url = new URL("http://faebuk.ch/lifestoryapp/v1/login");
-		URLConnection conn = url.openConnection();
-		
-		conn.setDoOutput(true);
-		
-		OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-		
-		writer.write(urlParameters);
-		writer.flush();
-		
-		String line;
-		String lines = null;
-		BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		
-		while ((line = reader.readLine()) != null) 
-			lines = line;
-		
-		writer.close();
-		reader.close();
-		
-		JSONParser jsonParser = new JSONParser();
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(lines);
-		
-		Boolean error = (Boolean) jsonObject.get("error");
-		
-		if (error){ 
-			this.loggedin = false;
-			return false;	
-		}
-		else{ 
-			this.apikey = (String) jsonObject.get("apiKey");
-			this.createdat = (String) jsonObject.get("createdAt");
-			this.email = (String) jsonObject.get("email");
-			this.username = (String) jsonObject.get("username");
-			this.userid = this.longToInt((Long) jsonObject.get("id_user")) ;
-			this.loggedin = true;
-			return true;
-		}*/
+		return null;
 	}
 	
 	protected String getUsername(){
@@ -137,10 +127,8 @@ public class User {
 		return this.createdat;
 	}
 	
-	protected Boolean isLoggedIn(){
-		if(this.loggedin)
-			return true;
-		return false;
+	public Boolean isLoggedIn(){
+		return this.loggedin;
 	}
 	
 	protected int getUserId(){
